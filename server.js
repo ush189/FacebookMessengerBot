@@ -27,6 +27,22 @@ app.get('/subscribe', function(req, res) {
     });
 });
 
+app.post('/webhook/', function (req, res) {
+    var messagingEvents = req.body.entry[0].messaging;
+    var result = '';
+
+    for (var i = 0; i < messagingEvents.length; i++) {
+        var event = req.body.entry[0].messaging[i];
+        var sender = event.sender.id;
+        if (event.message && event.message.text) {
+            var text = event.message.text;
+            // Handle a text message from this sender
+            result += '<br>' + text;
+        }
+    }
+    res.send(result);
+});
+
 app.listen(port, function() {
     console.log('Server listening at port %s', port);
 });
