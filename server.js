@@ -5,6 +5,8 @@ var bodyParser = require('body-parser');
 var app = express();
 var port = process.env.PORT || 3000;
 
+app.use(bodyParser.json());
+
 app.get('/', function(req, res) {
     res.send('Hello Facebook Messenger!');
 });
@@ -29,7 +31,7 @@ app.get('/subscribe', function(req, res) {
     });
 });
 
-app.post('/webhook/', bodyParser.json(), function (req, res) {
+app.post('/webhook/', function (req, res) {
     console.log('################ POST webhook');
     console.log('-----------------', req.body, '---------------');
     var messagingEvents = req.body.entry[0].messaging;
