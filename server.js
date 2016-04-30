@@ -28,6 +28,7 @@ app.get('/subscribe', function(req, res) {
 });
 
 app.post('/webhook/', function (req, res) {
+    console.log('-----------------', req.body, '---------------');
     var messagingEvents = req.body.entry[0].messaging;
     var result = '';
 
