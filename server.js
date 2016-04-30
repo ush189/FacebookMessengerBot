@@ -1,5 +1,6 @@
 var express = require('express');
 var request = require('request');
+var bodyParser = require('body-parser');
 
 var app = express();
 var port = process.env.PORT || 3000;
@@ -28,9 +29,9 @@ app.get('/subscribe', function(req, res) {
     });
 });
 
-app.post('/webhook/', function (req, res) {
+app.post('/webhook/', bodyParser.json(), function (req, res) {
     console.log('################ POST webhook');
-    console.log('-----------------', req, '---------------');
+    console.log('-----------------', req.body, '---------------');
     var messagingEvents = req.body.entry[0].messaging;
     var result = '';
 
