@@ -12,7 +12,6 @@ app.get('/', function(req, res) {
 });
 
 app.get('/webhook', function(req, res) {
-    console.log('################ GET webhook');
     if (req.query['hub.verify_token'] === 'verify_token_facebook_messenger') {
         res.send(req.query['hub.challenge']);
     } else {
@@ -32,21 +31,18 @@ app.get('/subscribe', function(req, res) {
 });
 
 app.post('/webhook/', function (req, res) {
-    console.log('################ POST webhook');
-    console.log('-----------------', req.body, '---------------');
     var messagingEvents = req.body.entry[0].messaging;
-    var result = '';
 
     for (var i = 0; i < messagingEvents.length; i++) {
         var event = req.body.entry[0].messaging[i];
-        var sender = event.sender.id;
         if (event.message && event.message.text) {
             var text = event.message.text;
             // Handle a text message from this sender
-            result += '<br>' + text;
+            console.log(text);
         }
     }
-    res.send(result);
+
+    res.sendStatus(200);
 });
 
 app.listen(port, function() {
