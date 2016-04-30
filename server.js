@@ -9,6 +9,7 @@ app.get('/', function(req, res) {
 });
 
 app.get('/webhook', function(req, res) {
+    console.log('################ GET webhook');
     if (req.query['hub.verify_token'] === 'verify_token_facebook_messenger') {
         res.send(req.query['hub.challenge']);
     } else {
@@ -28,7 +29,8 @@ app.get('/subscribe', function(req, res) {
 });
 
 app.post('/webhook/', function (req, res) {
-    console.log('-----------------', req.body, '---------------');
+    console.log('################ POST webhook');
+    console.log('-----------------', req, '---------------');
     var messagingEvents = req.body.entry[0].messaging;
     var result = '';
 
