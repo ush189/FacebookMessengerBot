@@ -36,8 +36,9 @@ app.post('/webhook/', function (req, res) {
 
     for (var i = 0; i < messagingEvents.length; i++) {
         var event = req.body.entry[0].messaging[i];
+        var senderId = event.sender.id;
+
         if (event.message && event.message.text) {
-            var senderId = event.sender.id;
             sendTextMessage(senderId, event.message.text);
 
             var options = [
@@ -51,6 +52,15 @@ app.post('/webhook/', function (req, res) {
                 }
             ];
             sendButtonMessage(senderId, "Wie geht es dir?", options);
+        } else if (event.message && event.message.postback) {
+            switch (event.message.postback) {
+                case "FEELING_GOOD":
+                    sendTextMessage(senderId, "Das freut mich!");
+                    break;
+                case "FEELING_BAD":
+                    sendTextMessage(senderId, "Oh, schade :(");
+                    break;
+            }
         }
     }
 
