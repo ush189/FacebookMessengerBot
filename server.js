@@ -39,7 +39,18 @@ app.post('/webhook/', function (req, res) {
         if (event.message && event.message.text) {
             var senderId = event.sender.id;
             sendTextMessage(senderId, event.message.text);
-            sendButtonMessage(senderId, "Wie geht es dir?", ["Gut", "Muss ja..."]);
+
+            var options = [
+                {
+                    title: "Gut",
+                    payload: "FEELING_GOOD"
+                },
+                {
+                    title: "Muss ja...",
+                    payload: "FEELING_BAD"
+                }
+            ];
+            sendButtonMessage(senderId, options);
         }
     }
 
@@ -59,24 +70,23 @@ function sendTextMessage(senderId, text) {
 }
 
 function sendButtonMessage(senderId, title, options) {
+    var buttons = [];
+    options.forEach(function(option) {
+        buttons.push({
+            type: "postback",
+            title: option.title,
+            payload: option.payload
+        });
+    });
+    console.log(buttons);
+
     var message = {
         "attachment": {
             "type":"template",
             "payload": {
                 "template_type": "button",
                 "text": title,
-                "buttons": [
-                    {
-                        "type": "web_url",
-                        "url": "https://petersapparel.parseapp.com",
-                        "title": "Show Website"
-                    },
-                    {
-                        "type": "postback",
-                        "title": "Start Chatting",
-                        "payload": "USER_DEFINED_PAYLOAD"
-                    }
-                ]
+                "buttons": buttons
             }
         }
     };
