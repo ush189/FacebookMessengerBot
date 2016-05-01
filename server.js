@@ -70,6 +70,7 @@ function sendTextMessage(senderId, text) {
 }
 
 function sendButtonMessage(senderId, title, options) {
+    console.log(senderId, title, options);
     var buttons = [];
     options.forEach(function(option) {
         buttons.push({
