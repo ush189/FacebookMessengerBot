@@ -50,7 +50,7 @@ app.post('/webhook/', function (req, res) {
                     payload: "FEELING_BAD"
                 }
             ];
-            sendButtonMessage(senderId, options);
+            sendButtonMessage(senderId, "Wie geht es dir?", options);
         }
     }
 
