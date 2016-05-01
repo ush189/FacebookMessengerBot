@@ -37,7 +37,9 @@ app.post('/webhook/', function (req, res) {
     for (var i = 0; i < messagingEvents.length; i++) {
         var event = req.body.entry[0].messaging[i];
         if (event.message && event.message.text) {
-            sendTextMessage(event.sender.id, event.message.text);
+            var senderId = event.sender.id;
+            sendTextMessage(senderId, event.message.text);
+            sendButtonMessage(senderId, "Wie geht es dir?", ["Gut", "Muss ja..."]);
         }
     }
 
@@ -49,6 +51,40 @@ app.listen(port, function() {
 });
 
 function sendTextMessage(senderId, text) {
+    var message = {
+        text: text
+    };
+
+    sendMessage(senderId, message);
+}
+
+function sendButtonMessage(senderId, title, options) {
+    var message = {
+        "attachment": {
+            "type":"template",
+            "payload": {
+                "template_type": "button",
+                "text": title,
+                "buttons": [
+                    {
+                        "type": "web_url",
+                        "url": "https://petersapparel.parseapp.com",
+                        "title": "Show Website"
+                    },
+                    {
+                        "type": "postback",
+                        "title": "Start Chatting",
+                        "payload": "USER_DEFINED_PAYLOAD"
+                    }
+                ]
+            }
+        }
+    };
+
+    sendMessage(senderId, message);
+}
+
+function sendMessage(senderId, message) {
     request.post({
         url: 'https://graph.facebook.com/v2.6/me/messages',
         qs: {
@@ -58,9 +94,7 @@ function sendTextMessage(senderId, text) {
             recipient: {
                 id: senderId
             },
-            message: {
-                text: text
-            }
+            message: message
         }
     }, function(error, response) {
         if (error) {
